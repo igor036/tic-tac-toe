@@ -1,0 +1,24 @@
+/*
+* Author:  Igor Joaquim dos Santos Lima
+* GitHub: https://github.com/igor036
+* E-mail: igorjoaquim.pg@gmail.com
+*/
+
+
+#game {
+    padding-top: 50px;
+}
+
+.game-section {
+
+    background-color: #A9A9A9;
+    
+    padding-left: 10px;
+    padding-top: 10px;
+
+    border: 1px;
+    border-style: solid;
+    border-color: #696969;
+    border-radius: 6px;
+
+}
