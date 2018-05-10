@@ -4,24 +4,15 @@
 * E-mail: igorjoaquim.pg@gmail.com
 */
 
-/* Pendentes
- * 1-placar.
- * 2-usuário escolher o simbolo.
- * 3-alerta de perca ou empate.
- * 4-usar um gif de load enquanto a ia
- * estiver cálculando a próxima jogada.
- */
-
-var userSimbol = "0";
-var iaSimbol = "X";
 var id;
 var inGame = true;
+var userSimbol = "0";
+var iaSimbol = "X";
 var board = { 
     0: ["","",""],
     1: ["","",""], 
     2: ["","",""] 
 };
-
 var gameScore = {
     ia:0,
     draw:0
@@ -61,7 +52,9 @@ function merge(a,b) {
 
     //verifica resultado do jogo!
     setTimeout(function() {
-        if (score(board) == iaSimbol) {
+        
+        if (winner(board) == iaSimbol) {
+
             alert("Você perdeu");
             inGame = false;
             $("#ia-score").html(++gameScore.ia);
@@ -70,7 +63,6 @@ function merge(a,b) {
             alert("Empate!");
             inGame = false;
             $("#draw-score").html(++gameScore.draw);
-
         }
     }, 100);
 }

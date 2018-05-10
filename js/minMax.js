@@ -45,28 +45,42 @@ function ready(m) {
     return count == 6;
 }
 
-function tree(simbol, matriz) {
+function podeAlfaBeta(simbol, matriz) {
 
     let child;
     let temp = clone(matriz);
     let node = {
         value: clone(matriz),
         simb: simbol,
-        childs: []
+        childs: [],
+        score: winner(matriz),
+        next: null
     };
 
-    if (score(matriz) == "E") {
+    if (winner(matriz) == "E") {
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
-    
+                  
                 if (temp[x][y] == "") {
     
                     child = clone(node.value);
                     child[x][y] = simbol;
+
                     temp[x][y] = "w";
+                    child = podeAlfaBeta(simbol == "X" ? "0" : "X", child);
                     
-                    node.childs.push(tree(simbol == "X" ? "0" : "X", child));
+                    node.childs.push(child);
+
+                    if (child.score == simbol) {
+
+                        node.score = simbol;
+                        node.next = child;
+                        return node;
+
+                    } else
+                        if(node.score == "E")
+                            node.score = simbol == "X" ? "0" : "X";
                 }
             }
         }
@@ -79,50 +93,9 @@ function next(simbol,board) {
 
     let node;
 
-    if (last == null) {
-
-        let queue = Queue();
-        let stack = Stack();
-        
-        node = tree(simbol, board);
-        queue.push(node);
-        stack.push(node);
-    
-        while (!queue.isEmpty()) {
-    
-            node = queue.pop();
-    
-            for (var i = node.childs.length - 1; i >= 0; i--) {
-    
-                queue.push(node.childs[i]);
-                stack.push(node.childs[i]);
-    
-            }
-        }
-    
-        while (!stack.isEmpty()) {  
-    
-            node = stack.pop();
-    
-            if (node.childs.length == 0)
-                node["score"] = score(node.value);
-    
-            else {
-    
-                for (let i = 0; i < node.childs.length; i++) {
-    
-                    if (node.simb == node.childs[i].score) {
-                        node["score"] = node.simb;
-                        break;
-                    }
-                }
-    
-                if (!node.score)
-                    node["score"] = node.simb == "X" ? "0" : "X";
-            }
-        }
-    
-    } else {
+    if (last == null) 
+        node = podeAlfaBeta(simbol, board);
+    else {
         
         for (let i = 0; i < last.childs.length; i++) {
             if (equals(last.childs[i].value,board)) {
@@ -131,16 +104,12 @@ function next(simbol,board) {
             }
         }
     }
-
-    for (let i = 0; i < node.childs.length; i++){
-        if (node.childs[i].score == simbol ){
-            node = node.childs[i];
-            break;
-        }
-    }
-
-    last = node;
-    return node.value;
+    
+    if (node.next == null)
+        return node.value;
+        
+    last = node.next;    
+    return last.value;
 }
 
 
@@ -169,7 +138,7 @@ function diagonal(m) {
 }
 
 
-function score(m) {
+function winner(m) {
 
     if (!ready(m)) {
         
