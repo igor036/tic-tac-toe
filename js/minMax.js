@@ -45,7 +45,7 @@ function ready(m) {
     return count == 6;
 }
 
-function podeAlfaBeta(simbol, matriz) {
+function podaAlfaBeta(simbol, matriz) {
 
     let child;
     let temp = clone(matriz);
@@ -57,7 +57,7 @@ function podeAlfaBeta(simbol, matriz) {
         next: null
     };
 
-    if (winner(matriz) == "E") {
+    if (node.score == "E") {
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
@@ -68,7 +68,7 @@ function podeAlfaBeta(simbol, matriz) {
                     child[x][y] = simbol;
 
                     temp[x][y] = "w";
-                    child = podeAlfaBeta(simbol == "X" ? "0" : "X", child);
+                    child = podaAlfaBeta(simbol == "X" ? "0" : "X", child);
                     
                     node.childs.push(child);
 
@@ -76,8 +76,10 @@ function podeAlfaBeta(simbol, matriz) {
 
                         node.score = simbol;
                         node.next = child;
-                        return node;
 
+                        if (winner(child.value) == "X")
+                            x = y = 3;
+                        
                     } else
                         if(node.score == "E")
                             node.score = simbol == "X" ? "0" : "X";
@@ -91,24 +93,18 @@ function podeAlfaBeta(simbol, matriz) {
 
 function next(simbol,board) {
 
-    let node;
-
-    if (last == null) 
-        node = podeAlfaBeta(simbol, board);
+    if (last == null)
+        last = podaAlfaBeta(simbol, board).next;
     else {
         
         for (let i = 0; i < last.childs.length; i++) {
             if (equals(last.childs[i].value,board)) {
-                node = last.childs[i];
+                last = last.childs[i].next;
                 break;
             }
         }
     }
-    
-    if (node.next == null)
-        return node.value;
-        
-    last = node.next;    
+            
     return last.value;
 }
 
