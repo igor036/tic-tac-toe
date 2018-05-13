@@ -34,37 +34,43 @@ $(function(){
 
 function merge(a,b) {
     
-    let count = 0;
+    //sem próxima jogada, o jogo termina em empate!
+    if (b == null) {
 
-    for (let x = 0; x  < 3; x++) {
-        for (let y = 0; y  < 3; y++) {
+        alert("Empate!");
+        inGame = false;
+        $("#draw-score").html(++gameScore.draw);
+
+    } else {
+
+        let count = 0;
+
+        for (let x = 0; x  < 3; x++) {
+            for (let y = 0; y  < 3; y++) {
             
-            if (b[x][y] != "")
-                count++;
+                if (b[x][y] != "")
+                    count++;
 
-            if (a[x][y] == "" && b[x][y] != "") {
-                $("#row-"+x+" div")[y].children[0].innerHTML = iaSimbol;
-                board[x][y] = iaSimbol;
-                break;
-            }
-        }   
-    }
-
-    //verifica resultado do jogo!
-    setTimeout(function() {
-        
-        if (winner(board) == iaSimbol) {
-
-            alert("Você perdeu");
-            inGame = false;
-            $("#ia-score").html(++gameScore.ia);
-
-        } else if (count == 9){
-            alert("Empate!");
-            inGame = false;
-            $("#draw-score").html(++gameScore.draw);
+                if (a[x][y] == "" && b[x][y] != "") {
+                    $("#row-"+x+" div")[y].children[0].innerHTML = iaSimbol;
+                    board[x][y] = iaSimbol;
+                    break;
+                }
+            }   
         }
-    }, 100);
+
+        //verifica se a IA ganhou com está jogada!
+        setTimeout(function() {
+        
+            if (winner(board) == iaSimbol) {
+    
+                alert("Você perdeu");
+                inGame = false;
+                $("#ia-score").html(++gameScore.ia);
+    
+            } 
+        }, 100);
+    }
 }
 
 

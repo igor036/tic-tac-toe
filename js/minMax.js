@@ -104,8 +104,10 @@ function next(simbol,board) {
             }
         }
     }
-            
-    return last.value;
+
+    if (last != null)
+        return last.value;
+    return null;
 }
 
 
